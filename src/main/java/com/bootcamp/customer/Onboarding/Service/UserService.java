@@ -21,7 +21,7 @@ public class UserService {
     private CustomerTypeRepository customerTypeRepository;
 
 
-    public User registerUser(String username, String password, String email, String customerType){
+    public User registerUser(String username, String password, String email, String phoneNumber, int customerType){
 
         if (username == null || username.trim().isEmpty()) {
             throw new ValidationException("Username is required");
@@ -32,7 +32,7 @@ public class UserService {
         if (email == null || email.trim().isEmpty()) {
             throw new ValidationException("Email is required");
         }
-        if (customerType == null || customerType.trim().isEmpty()) {
+        if (customerType < 1 || customerType >= 5) {
             throw new ValidationException("Customer type is required");
         }
 
@@ -40,6 +40,7 @@ public class UserService {
         user.setUsername(username);
         user.setPasswordHash(passwordEncoder.encode(password));
         user.setEmail(email);
+        user.setPhoneNumber(phoneNumber);
         user.setCustomerType(customerType);
 
         return userRepository.save(user);

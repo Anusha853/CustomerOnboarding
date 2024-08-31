@@ -17,9 +17,13 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser( @RequestParam String username, @RequestParam String password, @RequestParam String email, @RequestParam String customerType ){
+    public ResponseEntity<String> registerUser( @RequestParam String username, @RequestParam String password, @RequestParam String email, @RequestParam String phone, @RequestParam int customerType ){
+
+        System.out.println(username+ password+ email+ customerType);
+
         try {
-            userService.registerUser(username,password,email,customerType);
+
+            userService.registerUser(username,password,email,phone,customerType);
             return new ResponseEntity<>("User Registered successfuly", HttpStatus.CREATED);
         }catch (Exception e) {
             return new ResponseEntity<>("Error registering user: " + e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -29,6 +33,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestParam String username, @RequestParam String password) {
         User user = userService.loginUser(username, password);
+        System.out.println(user.toString());
         if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
         } else {

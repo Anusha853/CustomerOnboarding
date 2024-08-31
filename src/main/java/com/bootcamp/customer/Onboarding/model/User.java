@@ -18,9 +18,9 @@ public class User {
 
     private String email;
     private String phoneNumber;
-    private String customerType;
+    private int customerType;
 
-    public User(Long userId, String username, String passwordHash, String email, String phoneNumber, String customerType) {
+    public User(Long userId, String username, String passwordHash, String email, String phoneNumber, int customerType) {
         this.userId = userId;
         this.username = username;
         this.passwordHash = passwordHash;
@@ -29,8 +29,8 @@ public class User {
         this.customerType = customerType;
     }
 
-
     public User() {
+
     }
 
     public Long getUserId() {
@@ -73,11 +73,23 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getCustomerType() {
+    public int getCustomerType() {
         return customerType;
     }
 
-    public void setCustomerType(String customerType) {
+    public void setCustomerType(int customerType) {
         this.customerType = customerType;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + passwordHash + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phoneNumber + '\'' +
+                ", customerType=" + customerType +
+                '}';
+    }
+
 }
