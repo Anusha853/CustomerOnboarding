@@ -15,7 +15,7 @@ public class OnboardingApplication {
 
 		SpringApplication.run(OnboardingApplication.class, args);
 
-		System.out.println("Spring Framework version: " + SpringVersion.getVersion());
+
 
 	}
 

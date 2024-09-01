@@ -21,7 +21,7 @@ public class UserService {
     private CustomerTypeRepository customerTypeRepository;
 
 
-    public User registerUser(String username, String password, String email, String phoneNumber, int customerType){
+    public User registerUser(String username, String password, String email, String phoneNumber, int customerType) {
 
         if (username == null || username.trim().isEmpty()) {
             throw new ValidationException("Username is required");
@@ -48,11 +48,14 @@ public class UserService {
 
     public User loginUser(String username, String password) {
         User user = userRepository.findByUsername(username);
-        if (user != null && passwordEncoder.matches(password,user.getPasswordHash())) {
+        if (user != null && passwordEncoder.matches(password, user.getPasswordHash())) {
             return user;
         }
         return null;
     }
 
-
+    public boolean checkIfUSerExists(String username){
+        User user = userRepository.findByUsername(username);
+        return user != null;
+    }
 }

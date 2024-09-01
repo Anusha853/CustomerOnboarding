@@ -19,21 +19,25 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<String> registerUser( @RequestParam String username, @RequestParam String password, @RequestParam String email, @RequestParam String phone, @RequestParam int customerType ){
 
-        System.out.println(username+ password+ email+ customerType);
-
         try {
 
-            userService.registerUser(username,password,email,phone,customerType);
-            return new ResponseEntity<>("User Registered successfuly", HttpStatus.CREATED);
+            if(!userService.checkIfUSerExists(username)) {
+                userService.registerUser(username, password, email, phone, customerType);
+                return new ResponseEntity<>("Registration Successfully", HttpStatus.CREATED);
+            }else{
+                return new ResponseEntity<>("User Already exists", HttpStatus.CONFLICT);
+            }
+
         }catch (Exception e) {
             return new ResponseEntity<>("Error registering user: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
+
+
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestParam String username, @RequestParam String password) {
         User user = userService.loginUser(username, password);
-        System.out.println(user.toString());
         if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
