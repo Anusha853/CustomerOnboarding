@@ -1,13 +1,22 @@
 package com.bootcamp.customer.Onboarding.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
-    public class CustomerType {
-        @Id
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+
+public class CustomerType {
+
+    /*
+      @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long customerTypeId;
         private String typeName;
@@ -16,35 +25,16 @@ import java.util.List;
         @OneToMany(mappedBy = "customerType")
         private List<User> users;
 
-    public Long getCustomerTypeId() {
-        return customerTypeId;
-    }
+     */
 
-    public void setCustomerTypeId(Long customerTypeId) {
-        this.customerTypeId = customerTypeId;
-    }
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private int customerTypeId;
+        private String typeName;
+        private String description;
 
-    public String getTypeName() {
-        return typeName;
-    }
+    @OneToMany(mappedBy = "customerTypeEntity", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<User> users;
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
 }
