@@ -20,6 +20,9 @@ public class UserService {
     @Autowired
     private CustomerTypeRepository customerTypeRepository;
 
+    @Autowired
+    private EmailService emailService;
+
 
     public User registerUser(String username, String password, String email, String phoneNumber, int customerType) {
 
@@ -49,6 +52,11 @@ public class UserService {
     public User loginUser(String username, String password) {
         User user = userRepository.findByUsername(username);
         if (user != null && passwordEncoder.matches(password, user.getPasswordHash())) {
+            try{
+                emailService.sendLoginCongfirmation(user.getEmail());
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             return user;
         }
         return null;
