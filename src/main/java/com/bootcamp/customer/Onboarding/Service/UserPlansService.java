@@ -42,10 +42,12 @@ public class UserPlansService {
             userPlansRepository.save(userPlans);
         }
     }
-    public List<UserPlans> getUserPlans(Long userId){
+    public UserPlans getUserPlans(Long userId){
         User user = userRepository.findById(userId).orElseThrow(
                 ()-> new RuntimeException("User Not Found")
         );
+
         return userPlansRepository.findByUser(user);
     }
+
 }

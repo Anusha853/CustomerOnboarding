@@ -3,15 +3,15 @@ package com.bootcamp.customer.Onboarding.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+//import lombok.*;
 
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+//@Getter
+//@Setter
+//@NoArgsConstructor
+//@AllArgsConstructor
 
 public class CustomerType {
 
@@ -33,8 +33,39 @@ public class CustomerType {
         private String typeName;
         private String description;
 
-    @OneToMany(mappedBy = "customerTypeEntity", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<User> users;
+
+    public CustomerType(){}
+
+    public CustomerType(int customerTypeId, String typeName, String description) {
+        this.customerTypeId = customerTypeId;
+        this.typeName = typeName;
+        this.description = description;
+
+    }
+
+    public int getCustomerTypeId() {
+        return customerTypeId;
+    }
+
+    public void setCustomerTypeId(int customerTypeId) {
+        this.customerTypeId = customerTypeId;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 
 }

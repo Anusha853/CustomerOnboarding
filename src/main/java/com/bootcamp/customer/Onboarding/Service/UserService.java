@@ -1,9 +1,13 @@
 package com.bootcamp.customer.Onboarding.Service;
 
 import com.bootcamp.customer.Onboarding.Repository.CustomerTypeRepository;
+import com.bootcamp.customer.Onboarding.Repository.PlansRepository;
+import com.bootcamp.customer.Onboarding.Repository.UserPlansRepository;
 import com.bootcamp.customer.Onboarding.Repository.UserRepository;
 import com.bootcamp.customer.Onboarding.exceptions.ValidationException;
+import com.bootcamp.customer.Onboarding.model.Plans;
 import com.bootcamp.customer.Onboarding.model.User;
+import com.bootcamp.customer.Onboarding.model.UserDetailsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,14 @@ public class UserService {
     @Autowired
     private CustomerTypeRepository customerTypeRepository;
 
+    @Autowired
+    private PlansRepository plansRepository;
+
+    @Autowired
+    private UserPlansRepository userPlansRepository;
+
+    @Autowired
+    private UserPlansService userPlansService;
 
     public User registerUser(String username, String password, String email, String phoneNumber, int customerType) {
 
@@ -58,4 +70,46 @@ public class UserService {
         User user = userRepository.findByUsername(username);
         return user != null;
     }
+
+    public UserDetailsDTO authenticate(String username, String password) {
+        User user = userRepository.findByUsername(username);
+
+        Long planid=userPlansRepository.findPlanIdByUserId(user.getUserId());
+
+        Plans plans = plansRepository.findByPlanId(planid);
+        if (user != null && passwordEncoder.matches(password, user.getPasswordHash())) {
+            if(plans!=null){
+            return new UserDetailsDTO(
+                    user.getUsername(),
+                    user.getUsername(),
+                    user.getPhoneNumber(),
+                    user.getCustomerType(),
+                    plans.getPlan_name(),
+                    plans.getPlan_description(),
+                    plans.getPrice(),
+                    plans.getValidity_days()
+            );}
+            else{
+                return new UserDetailsDTO(
+                        user.getUsername(),
+                        user.getUsername(),
+                        user.getPhoneNumber(),
+                        user.getCustomerType()
+                        );
+
+            }
+        }
+        return null;
+    }
+    /*
+    public Long getUserId(String username, String password) {
+        User user = userRepository.findByUsername(username);
+        if (user != null && passwordEncoder.matches(password, user.getPasswordHash())) {
+            return user.getUserId();
+
+        }
+        return null;
+    }*/
+
+
 }
