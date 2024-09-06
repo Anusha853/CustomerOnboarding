@@ -19,7 +19,7 @@ public class EmailService {
     public void sendEmail(String to, String userName) {
         // Create JSON object for email
         JSONObject email = new JSONObject();
-        email.put("From", new JSONObject().put("Email",emailConstants.EMAIL_FROM));
+        email.put("From", new JSONObject().put("Email", emailConstants.EMAIL_FROM));
         email.put("To", new JSONArray().put(new JSONObject().put("Email", to)));
         email.put("Subject", emailConstants.WELCOME_EMAIL_SUBJECT + userName);
         email.put("TextPart", emailConstants.WELCOME_EMAIL_BODY);
@@ -29,10 +29,17 @@ public class EmailService {
 
         try {
             MailjetResponse response = mailjetClient.post(request);
-            if (response.getStatus() != 200) {
-                throw new RuntimeException("Failed to send email. Status code: " + response.getStatus());
+            if (response.getStatus() == 200) {
+                System.out.println("Email sent successfully.");
+                System.out.println("Response data: " + response.getData());
+            } else {
+
+                String responseBody = response.getData().toString();
+                throw new RuntimeException("Failed to send email. Status code: " + response.getStatus() + ", Response body: " + responseBody);
             }
         } catch (Exception e) {
+
+            e.printStackTrace();
             throw new RuntimeException("Error sending email", e);
         }
     }
