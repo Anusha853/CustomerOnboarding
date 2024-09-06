@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface PlansRepository extends JpaRepository<Plans,Long> {
 
-    //Plans findByPlanId(Long plan_id);
     Plans findByPlanId(Long plan_id);
 
 

@@ -33,19 +33,4 @@ public class UserPlansController {
         return ResponseEntity.ok().build();
     }
 
-    /*
-    @GetMapping("/profile")
-    public ResponseEntity<Plans>
-    getUserPlans(@RequestBody Map<String, String> loginRequest){
-        String username = loginRequest.get("username");
-        String password = loginRequest.get("password");
-
-        Long userid = userService.getUserId(username, password);
-        Long planid=plansService.getUserPlanId(userid);
-
-        Plans userPlans = plansService.getPlanById(planid);
-
-            return ResponseEntity.ok(userPlans);
-
-    }*/
 }
