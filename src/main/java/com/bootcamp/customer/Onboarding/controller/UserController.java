@@ -2,11 +2,14 @@ package com.bootcamp.customer.Onboarding.controller;
 
 import com.bootcamp.customer.Onboarding.Service.UserService;
 import com.bootcamp.customer.Onboarding.model.User;
+import com.bootcamp.customer.Onboarding.model.UserDetailsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -42,6 +45,19 @@ public class UserController {
             return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PostMapping("/profile")
+    public ResponseEntity<UserDetailsDTO> profileUser(@RequestBody Map<String, String> loginRequest) {
+        String username = loginRequest.get("username");
+        String password = loginRequest.get("password");
+
+        UserDetailsDTO user = userService.authenticate(username, password);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
