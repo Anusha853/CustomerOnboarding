@@ -34,6 +34,7 @@ public class CustomerType {
     }
 
     public int getCustomerTypeId() {
+
         return customerTypeId;
     }
 

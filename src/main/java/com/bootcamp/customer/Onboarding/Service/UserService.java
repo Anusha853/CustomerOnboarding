@@ -55,6 +55,11 @@ public class UserService {
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
         user.setCustomerType(customerType);
+        try{
+            emailService.sendEmail(user.getEmail(),user.getUsername());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         return userRepository.save(user);
     }
@@ -62,11 +67,7 @@ public class UserService {
     public User loginUser(String username, String password) {
         User user = userRepository.findByUsername(username);
         if (user != null && passwordEncoder.matches(password, user.getPasswordHash())) {
-            try{
-                emailService.sendEmail(user.getEmail(),user.getUsername());
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+
             return user;
         }
         return null;

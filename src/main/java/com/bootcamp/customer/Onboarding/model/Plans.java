@@ -85,4 +85,16 @@ public class Plans {
     public void setPlan_type(PlanType plan_type) {
         this.plan_type = plan_type;
     }
+
+    @Override
+    public String toString() {
+        return "Plans{" +
+                "planId=" + planId +
+                ", plan_name='" + plan_name + '\'' +
+                ", plan_description='" + plan_description + '\'' +
+                ", price=" + price +
+                ", validity_days=" + validity_days +
+                ", plan_type=" + plan_type +
+                '}';
+    }
 }

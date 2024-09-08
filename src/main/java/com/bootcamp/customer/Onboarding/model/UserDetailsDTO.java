@@ -13,6 +13,7 @@ public class UserDetailsDTO {
     private double price;
     private int validity_days;
 
+
     public String getUsername() {
         return username;
     }

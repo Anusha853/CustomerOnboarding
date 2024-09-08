@@ -27,9 +27,15 @@ public class UserPlansController {
     @Autowired
     private PlansService plansService;
 
-    @PostMapping("/add")
+    @PostMapping("/addPlans")
     public ResponseEntity<Void> addPlansToUser(@RequestParam Long userId, @RequestParam List<Long> plansIds){
         userPlansService.addPlansToUser(userId,plansIds);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<Void> addPlanToUser(@RequestParam Long userId, @RequestParam Long planId){
+        userPlansService.addPlanToUser(userId,planId);
         return ResponseEntity.ok().build();
     }
 
