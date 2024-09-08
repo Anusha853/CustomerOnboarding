@@ -12,7 +12,15 @@ public class UserDetailsDTO {
     private String plan_description;
     private double price;
     private int validity_days;
+    private boolean document_verification;
 
+    public boolean isDocument_verification() {
+        return document_verification;
+    }
+
+    public void setDocument_verification(boolean document_verification) {
+        this.document_verification = document_verification;
+    }
 
     public String getUsername() {
         return username;
@@ -78,7 +86,7 @@ public class UserDetailsDTO {
         this.validity_days = validity_days;
     }
 
-    public UserDetailsDTO(String username, String name, String phone, int customerType, String plan_name, String plan_description, double price, int validity_days) {
+    public UserDetailsDTO(String username, String name, String phone, int customerType, String plan_name, String plan_description, double price, int validity_days,boolean document_verification) {
         this.username = username;
         this.name = name;
         this.phone = phone;
@@ -87,12 +95,14 @@ public class UserDetailsDTO {
         this.plan_description = plan_description;
         this.price = price;
         this.validity_days = validity_days;
+        this.document_verification=document_verification;
     }
-    public UserDetailsDTO(String username, String name, String phone, int customerType) {
+    public UserDetailsDTO(String username, String name, String phone, int customerType,boolean document_verification) {
         this.username = username;
         this.name = name;
         this.phone = phone;
         this.customerType = customerType;
+        this.document_verification=document_verification;
 
     }
 }

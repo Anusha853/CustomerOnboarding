@@ -1,9 +1,7 @@
 package com.bootcamp.customer.Onboarding.Service;
 
-import com.bootcamp.customer.Onboarding.Repository.CustomerTypeRepository;
-import com.bootcamp.customer.Onboarding.Repository.PlansRepository;
-import com.bootcamp.customer.Onboarding.Repository.UserPlansRepository;
-import com.bootcamp.customer.Onboarding.Repository.UserRepository;
+import com.bootcamp.customer.Onboarding.Repository.*;
+import com.bootcamp.customer.Onboarding.controller.DocumentController;
 import com.bootcamp.customer.Onboarding.exceptions.ValidationException;
 import com.bootcamp.customer.Onboarding.model.Plans;
 import com.bootcamp.customer.Onboarding.model.User;
@@ -32,6 +30,9 @@ public class UserService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private DocumentRepository documentRepository;
 
 
     public User registerUser(String username, String password, String email, String phoneNumber, int customerType) {
@@ -84,6 +85,7 @@ public class UserService {
         Long planid=userPlansRepository.findPlanIdByUserId(user.getUserId());
 
         Plans plans = plansRepository.findByPlanId(planid);
+        boolean doc_verified=documentRepository.isDocumentVerified(user.getUserId());
         if (user != null && passwordEncoder.matches(password, user.getPasswordHash())) {
             if(plans!=null){
                 return new UserDetailsDTO(
@@ -94,14 +96,16 @@ public class UserService {
                         plans.getPlan_name(),
                         plans.getPlan_description(),
                         plans.getPrice(),
-                        plans.getValidity_days()
+                        plans.getValidity_days(),
+                        doc_verified
                 );}
             else{
                 return new UserDetailsDTO(
                         user.getUsername(),
                         user.getUsername(),
                         user.getPhoneNumber(),
-                        user.getCustomerType()
+                        user.getCustomerType(),
+                        doc_verified
                 );
 
             }
