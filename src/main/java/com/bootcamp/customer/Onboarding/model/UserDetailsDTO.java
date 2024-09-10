@@ -78,6 +78,9 @@ public class UserDetailsDTO {
         this.validity_days = validity_days;
     }
 
+    public UserDetailsDTO() {
+    }
+
     public UserDetailsDTO(String username, String name, String phone, int customerType, String plan_name, String plan_description, double price, int validity_days) {
         this.username = username;
         this.name = name;
