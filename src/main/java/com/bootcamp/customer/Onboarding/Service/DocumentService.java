@@ -83,7 +83,7 @@ public class DocumentService {
     }
 
     // Code to make the user's document status verified
-    public Document verifyDocument(Long userId){
+   /* public Document verifyDocument(Long userId){
         Optional<Document> documentOpt = documentRepository.findByUserId(userId);
 
         if(documentOpt.isPresent()){
@@ -98,7 +98,22 @@ public class DocumentService {
         }else{
             throw new ResourceNotFoundException("Document not found for userId:" + userId);
         }
+    }*/
+
+    public Document verifyDocument(Long userId) {
+        Optional<Document> documentOpt = documentRepository.findByUserId(userId);
+
+        if (documentOpt.isPresent()) {
+            Document document = documentOpt.get();
+            document.setStatus(true);
+            notificationService.documentVerificationSuccess(userId);
+            notificationService.notificationSentForUser(userId);
+            return documentRepository.save(document);
+        } else {
+            throw new ResourceNotFoundException("Document not found for userId:" + userId);
+        }
     }
+
 
     //Code to check the status of the document
     public boolean isDocumentVerified(Long userId){

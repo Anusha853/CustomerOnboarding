@@ -96,7 +96,7 @@ public class NotificationService {
         }
 
         User user = userOpt.get();
-            emailService.sendDocumentNotification(user.getEmail());
+        emailService.sendDocumentNotification(user.getEmail());
 
     }
 
