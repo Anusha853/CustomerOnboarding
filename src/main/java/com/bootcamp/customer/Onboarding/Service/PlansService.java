@@ -26,11 +26,6 @@ public class PlansService {
     @Autowired
     private UserService userService;
 
-
-
-
-
-
     public List<Plans> getAllPlans(){
         return plansRepository.findAll();
     }

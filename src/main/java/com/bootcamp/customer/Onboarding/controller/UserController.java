@@ -48,6 +48,12 @@ public class UserController {
         }
     }
 
+    @PutMapping("/update")
+
+
+
+
+
     @PostMapping("/profile")
     public ResponseEntity<UserDetailsDTO> profileUser(@RequestBody Map<String, String> loginRequest) {
         String username = loginRequest.get("username");
@@ -60,5 +66,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
+
 
 }
