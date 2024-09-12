@@ -32,6 +32,9 @@ public class DocumentService {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private AdhaarService adhaarService;
+
     private static final String TEMP_DIR = System.getProperty("java.io.tmpdir");
 
     public String processDocument(MultipartFile file, Long userId) throws IOException, TesseractException {
@@ -48,8 +51,17 @@ public class DocumentService {
         String name = extractName(text);
 
         Files.delete(tempFilePath);
+
+        boolean isDocVaild = adhaarService.isAadhaarExists(aadhaarNumber);
         saveDocument(userId, "Aadhaar", false);
-        return String.format("Aadhaar Number: %s, Name: %s", aadhaarNumber, name);
+        if(isDocVaild) {
+            verifyDocument(userId);
+            return String.format("Aadhaar Number: %s is verified ", aadhaarNumber);
+        }
+
+        else
+            return String.format("Aadhaar Number: %s is not valid", aadhaarNumber);
+
     }
 
     private void saveDocument(Long userId, String type, boolean status) {

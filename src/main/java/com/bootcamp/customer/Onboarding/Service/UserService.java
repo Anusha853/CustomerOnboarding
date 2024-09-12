@@ -34,6 +34,10 @@ public class UserService {
     @Autowired
     private DocumentRepository documentRepository;
 
+    @Autowired
+    private OtpService otpService;
+
+
 
     public User registerUser(String username, String password, String email, String phoneNumber, int customerType) {
 
@@ -68,15 +72,26 @@ public class UserService {
     public User loginUser(String username, String password) {
         User user = userRepository.findByUsername(username);
         if (user != null && passwordEncoder.matches(password, user.getPasswordHash())) {
-
+            // code to send the email
+            otpService.generateAndSendOtp(user.getEmail(),user.getUsername());
             return user;
         }
         return null;
     }
 
-    public boolean checkIfUSerExists(String username){
+    public boolean checkIfUSerExists(String email){
+        User user = userRepository.findByEmail(email);
+       return user != null;
+    }
+
+    public boolean updatePassword(String username, String oldPassword, String newPassword) {
         User user = userRepository.findByUsername(username);
-        return user != null;
+        if (user != null && passwordEncoder.matches(oldPassword, user.getPasswordHash())) {
+            user.setPasswordHash(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 
     public UserDetailsDTO authenticate(String username, String password) {
@@ -112,5 +127,6 @@ public class UserService {
         }
         return null;
     }
+
 
 }

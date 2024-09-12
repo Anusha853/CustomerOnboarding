@@ -1,5 +1,6 @@
 package com.bootcamp.customer.Onboarding.controller;
 
+import com.bootcamp.customer.Onboarding.Service.OtpService;
 import com.bootcamp.customer.Onboarding.Service.UserService;
 import com.bootcamp.customer.Onboarding.model.User;
 import com.bootcamp.customer.Onboarding.model.UserDetailsDTO;
@@ -15,28 +16,25 @@ import java.util.Map;
 @RequestMapping("/user")
 @Validated
 public class UserController {
-
     @Autowired
     private UserService userService;
+    @Autowired
+    private OtpService otpService;
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser( @RequestParam String username, @RequestParam String password, @RequestParam String email, @RequestParam String phone, @RequestParam int customerType ){
-
         try {
-
-            if(!userService.checkIfUSerExists(username)) {
+            if(!userService.checkIfUSerExists(email)) {
                 userService.registerUser(username, password, email, phone, customerType);
                 return new ResponseEntity<>("Registration Successfully", HttpStatus.CREATED);
             }else{
                 return new ResponseEntity<>("User Already exists", HttpStatus.CONFLICT);
             }
-
         }catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>("Error registering user: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestParam String username, @RequestParam String password) {
@@ -48,11 +46,34 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update")
+    @PostMapping("/update-password")
+    public ResponseEntity<String> updatePassword(
+            @RequestParam String username,
+            @RequestParam String oldPassword,
+            @RequestParam String newPassword) {
 
+        try {
+            boolean updated = userService.updatePassword(username, oldPassword, newPassword);
+            if (updated) {
+                return new ResponseEntity<>("Password reset Successful!!", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Invalid username or old password", HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error updating password: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
+    @PostMapping("/verify")
+    public ResponseEntity<?> verifyOtp(@RequestParam String email, @RequestParam String otp){
+        boolean isValid = otpService.verifyOtp(email, otp);
+        if (isValid) {
+            return new ResponseEntity<>("OTP verified successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Invalid or expired OTP", HttpStatus.UNAUTHORIZED);
+        }
 
-
+    }
 
     @PostMapping("/profile")
     public ResponseEntity<UserDetailsDTO> profileUser(@RequestBody Map<String, String> loginRequest) {
@@ -66,7 +87,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-
-
-
 }
