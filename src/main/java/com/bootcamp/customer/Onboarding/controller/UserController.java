@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/user")
 @Validated
@@ -40,7 +43,11 @@ public class UserController {
     public ResponseEntity<?> loginUser(@RequestParam String username, @RequestParam String password) {
         User user = userService.loginUser(username, password);
         if (user != null) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("userId", user.getUserId());
+            response.put("username", user.getUsername());
             return new ResponseEntity<>(user, HttpStatus.OK);
+
         } else {
             return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
         }
