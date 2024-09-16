@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface DocumentRepository extends JpaRepository<Document, Long> {
     Optional<Document> findByUserId(Long userId);
 
+    void deleteById(Long userId);
     @Query("SELECT COUNT(up) > 0 FROM Document up WHERE up.user.userId = :userId AND up.status = true" )
     boolean isDocumentVerified(@Param("userId") Long userId);
 }

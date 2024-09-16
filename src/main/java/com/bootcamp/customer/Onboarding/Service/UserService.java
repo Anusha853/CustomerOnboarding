@@ -72,8 +72,6 @@ public class UserService {
     public User loginUser(String username, String password) {
         User user = userRepository.findByUsername(username);
         if (user != null && passwordEncoder.matches(password, user.getPasswordHash())) {
-            // code to send the email
-            otpService.generateAndSendOtp(user.getEmail(),user.getUsername());
             return user;
         }
         return null;
@@ -84,11 +82,21 @@ public class UserService {
        return user != null;
     }
 
+    public boolean sendOtp(String username) {
+        User user = userRepository.findByUsername(username);
+        try{
+            otpService.generateAndSendOtp(user.getEmail(),username);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean updatePassword(String username, String oldPassword, String newPassword) {
         User user = userRepository.findByUsername(username);
         if (user != null && passwordEncoder.matches(oldPassword, user.getPasswordHash())) {
-            user.setPasswordHash(passwordEncoder.encode(newPassword));
-            userRepository.save(user);
+            otpService.generateAndSendOtp(user.getEmail(),username);
             return true;
         }
         return false;
@@ -127,6 +135,7 @@ public class UserService {
         }
         return null;
     }
+
 
 
 }

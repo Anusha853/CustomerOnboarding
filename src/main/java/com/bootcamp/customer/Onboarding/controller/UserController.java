@@ -54,21 +54,15 @@ public class UserController {
     }
 
     @PostMapping("/update-password")
-    public ResponseEntity<String> updatePassword(
-            @RequestParam String username,
-            @RequestParam String oldPassword,
-            @RequestParam String newPassword) {
+    public ResponseEntity<String> updatePassword(@RequestParam String username) {
 
-        try {
-            boolean updated = userService.updatePassword(username, oldPassword, newPassword);
-            if (updated) {
-                return new ResponseEntity<>("Password reset Successful!!", HttpStatus.OK);
+        boolean otp = userService.sendOtp(username);
+
+            if (otp) {
+                return new ResponseEntity<>("Otp sent to your Mail", HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("Invalid username or old password", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Invalid user", HttpStatus.BAD_REQUEST);
             }
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error updating password: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
     }
 
     @PostMapping("/verify")

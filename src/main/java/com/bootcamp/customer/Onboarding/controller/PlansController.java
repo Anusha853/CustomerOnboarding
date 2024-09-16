@@ -1,6 +1,7 @@
 package com.bootcamp.customer.Onboarding.controller;
 
 import com.bootcamp.customer.Onboarding.Service.PlansService;
+import com.bootcamp.customer.Onboarding.model.PlanType;
 import com.bootcamp.customer.Onboarding.model.Plans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,11 @@ import java.util.List;
             return ResponseEntity.notFound().build(); // Return 404 if plan is not found
         }
         return ResponseEntity.ok(plan); // Return 200 OK with the plan if found
+    }
+
+    @GetMapping("/types")
+    public List<PlanType> getAllPlanTypes() {
+        return plansService.getAllPlanTypes();
     }
 }
 

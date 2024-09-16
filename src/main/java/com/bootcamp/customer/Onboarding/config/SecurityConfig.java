@@ -31,8 +31,4 @@ public class SecurityConfig {
             }
         };
     }
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
 }

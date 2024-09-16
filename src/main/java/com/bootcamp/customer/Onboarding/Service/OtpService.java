@@ -68,22 +68,6 @@ public class OtpService {
         return otp.toString();
     }
 
-    public boolean generateAndSendOtpForPasswordReset(String username) {
-        String email  = userRepository.findByUsername(username).getEmail();
-
-        String otp = generateOtp();
-        otpStore.put(email, new OtpData(otp, System.currentTimeMillis()));
-        System.out.println(otpStore.get(email));
-        try {
-            emailService.sendOtpEmail(email, username, otp);
-            return true;
-        } catch (Exception e) {
-            System.out.println("Error sending the email:");
-            e.printStackTrace();
-            return false;
-        }
-
-    }
 
     private static class OtpData {
         private final String otp;

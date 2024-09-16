@@ -14,21 +14,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/otp")
 public class OtpController {
-//
-//    @Autowired
-//    private OtpService otpService;
-//    @Autowired
-//    private UserService userService;
+
+    @Autowired
+    private OtpService otpService;
+    @Autowired
+    private UserService userService;
 
 //    @PostMapping("/generate")
 //    public String generateOtp(@RequestParam String email){
 //        otpService.generateAndSendOtp(email);
 //        return "OTP send to " + email;
 //    }
-
+//
 //    @PostMapping("/verify")
 //    public ResponseEntity<?> verifyOtp(@RequestParam String email, @RequestParam String otp){
-//        User user = userService.verifyOtpAndLogin(email, otp);
+//        User user = otpService.verifyOtp(email, otp);
 //        if (user != null) {
 //            return ResponseEntity.ok(user);  // User authenticated and OTP verified
 //        } else {
