@@ -43,7 +43,7 @@ public class DocumentService {
         Files.write(tempFilePath, file.getBytes());
 
         ITesseract tesseract = new Tesseract();
-        tesseract.setDatapath("C:\\Users\\e031759\\Project\\Onboarding\\src\\main\\resources\\TrainingData"); // Adjust path based on your OS and Tesseract installation
+        tesseract.setDatapath("C:\\CustomerOnboarding\\Customer_Onboarding\\src\\main\\resources\\TrainingData"); // Adjust path based on your OS and Tesseract installation
 
         String text = tesseract.doOCR(tempFilePath.toFile());
 
@@ -51,9 +51,9 @@ public class DocumentService {
         String name = extractName(text);
 
         Files.delete(tempFilePath);
-
-        boolean isDocVaild = adhaarService.isAadhaarExists(aadhaarNumber);
         saveDocument(userId, "Aadhaar", false);
+        boolean isDocVaild = adhaarService.isAadhaarExists(aadhaarNumber);
+
         if(isDocVaild) {
             verifyDocument(userId);
             return String.format("Aadhaar Number: %s is verified ", aadhaarNumber);
@@ -137,5 +137,15 @@ public class DocumentService {
         return false;
 
     }
+
+    public void deleteDocumentByUserId(Long userId) {
+        Optional<Document> documentOpt = documentRepository.findByUserId(userId);
+        if (documentOpt.isPresent()) {
+            documentRepository.delete(documentOpt.get());
+        } else {
+            throw new ResourceNotFoundException("Document not found for userId: " + userId);
+        }
+    }
+
 
 }
