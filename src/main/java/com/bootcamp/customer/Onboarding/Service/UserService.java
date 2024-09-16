@@ -93,13 +93,16 @@ public class UserService {
         return false;
     }
 
-    public boolean updatePassword(String username, String oldPassword, String newPassword) {
+    public boolean updatePassword(String username, String newPassword) {
         User user = userRepository.findByUsername(username);
-        if (user != null && passwordEncoder.matches(oldPassword, user.getPasswordHash())) {
-            otpService.generateAndSendOtp(user.getEmail(),username);
+        try{
+            user.setPasswordHash(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+
             return true;
+        }catch (Exception e){
+            return false;
         }
-        return false;
     }
 
     public UserDetailsDTO authenticate(String username, String password) {

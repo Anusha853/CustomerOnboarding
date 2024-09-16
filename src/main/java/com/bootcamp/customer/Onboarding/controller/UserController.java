@@ -73,7 +73,16 @@ public class UserController {
         } else {
             return new ResponseEntity<>("Invalid or expired OTP", HttpStatus.UNAUTHORIZED);
         }
+    }
 
+    @PostMapping("/change-password")
+    public ResponseEntity<String> updatePassword(@RequestParam String username, @RequestParam String newPassword) {
+        boolean isUpdated = userService.updatePassword(username, newPassword);
+        if (isUpdated) {
+            return new ResponseEntity<>("Password updated successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("User not found or password update failed", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/profile")
