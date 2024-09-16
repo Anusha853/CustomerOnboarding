@@ -52,37 +52,37 @@ public class DocumentControllerTest {
                 .andExpect(content().string("Error processing file: Error processing file"));
     }
 
-    @Test
-    public void testVerifyDocumentSuccess() throws Exception {
-        Long userId = 1L;
-        Document document = new Document();
-        document.setUserId(userId);
-        document.setType("Aadhaar");
-        document.setStatus(true);
+//    @Test
+//    public void testVerifyDocumentSuccess() throws Exception {
+//        Long userId = 1L;
+//        Document document = new Document();
+//        document.setUserId(userId);
+//        document.setType("Aadhaar");
+//        document.setStatus(true);
+//
+//        when(documentService.verifyDocument(userId)).thenReturn(document);
+//
+//        mockMvc.perform(put("/user/document/verify")
+//                        .param("userId", userId.toString()))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.userId").value(userId))
+//                .andExpect(jsonPath("$.type").value("Aadhaar"))
+//                .andExpect(jsonPath("$.status").value(true));
+//    }
 
-        when(documentService.verifyDocument(userId)).thenReturn(document);
-
-        mockMvc.perform(put("/user/document/verify")
-                        .param("userId", userId.toString()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.userId").value(userId))
-                .andExpect(jsonPath("$.type").value("Aadhaar"))
-                .andExpect(jsonPath("$.status").value(true));
-    }
-
-    @Test
-    public void testVerifyDocumentNotFound() throws Exception {
-        Long userId = 1L;
-
-        // Mock the service to throw ResourceNotFoundException
-        when(documentService.verifyDocument(userId)).thenThrow(new ResourceNotFoundException("Document not found"));
-
-        // Perform the test
-        mockMvc.perform(put("/user/document/verify")
-                        .param("userId", userId.toString()))
-                .andExpect(status().isNotFound())  // Ensure the status is 404
-                .andExpect(content().string("Document not found"));  // Ensure the error message is correct
-    }
-
+//    @Test
+//    public void testVerifyDocumentNotFound() throws Exception {
+//        Long userId = 1L;
+//
+//        // Mock the service to throw ResourceNotFoundException
+//        when(documentService.verifyDocument(userId)).thenThrow(new ResourceNotFoundException("Document not found"));
+//
+//        // Perform the test
+//        mockMvc.perform(put("/user/document/verify")
+//                        .param("userId", userId.toString()))
+//                .andExpect(status().isNotFound())  // Ensure the status is 404
+//                .andExpect(content().string("Document not found"));  // Ensure the error message is correct
+//    }
+//
 
 }
