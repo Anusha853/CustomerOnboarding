@@ -3,12 +3,14 @@ package com.bootcamp.customer.Onboarding.Service;
 import com.bootcamp.customer.Onboarding.Repository.*;
 import com.bootcamp.customer.Onboarding.controller.DocumentController;
 import com.bootcamp.customer.Onboarding.exceptions.ValidationException;
-import com.bootcamp.customer.Onboarding.model.Plans;
-import com.bootcamp.customer.Onboarding.model.User;
-import com.bootcamp.customer.Onboarding.model.UserDetailsDTO;
+import com.bootcamp.customer.Onboarding.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -138,7 +140,45 @@ public class UserService {
         }
         return null;
     }
+// Admin methods
+public List<AdminDto> getAllUsers() {
+    System.out.println(userRepository.findAll().stream().map(this::convertToAdminDto).collect(Collectors.toList()));
+    return userRepository.findAll().stream().map(this::convertToAdminDto).collect(Collectors.toList());
+}
 
+    public List<AdminDto> getUsersByType(int customerType) {
+        return userRepository.findByCustomerType(customerType).stream()
+                .map(this::convertToAdminDto)
+                .collect(Collectors.toList());
+    }
+    public List<AdminDto> getUsersByDocumentStatus(boolean isVerified) {
+        // Find users with the specified document status
+        List<User> usersWithStatus = documentRepository.findByStatus(isVerified).stream()
+                .map(Document::getUser)
+                .collect(Collectors.toList());
+
+        return usersWithStatus.stream()
+                .map(this::convertToAdminDto)
+                .collect(Collectors.toList());
+    }
+
+    private AdminDto convertToAdminDto(User user) {
+        // Get document status
+        Optional<Document> document = documentRepository.findById(user.getUserId());
+        String documentStatus = document.isPresent() && document.get().isStatus() ? "Verified" : "Not Verified";
+
+        // Get plan name
+        Optional<UserPlans> userPlan = userPlansRepository.findByUser(user);
+        String planName = userPlan.isPresent() ? userPlan.get().getPlan().getPlan_name() : "NA";
+
+        return new AdminDto(
+                user.getUsername(),
+                user.getEmail(),
+                user.getCustomerType(),
+                documentStatus,
+                planName
+        );
+    }
 
 
 }

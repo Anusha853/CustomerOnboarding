@@ -14,10 +14,8 @@ import java.io.Serializable;
 
 
 public class Notification implements Serializable {
-
     @EmbeddedId
     private NotificationId id;
-
     @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "userId", referencedColumnName = "userId")

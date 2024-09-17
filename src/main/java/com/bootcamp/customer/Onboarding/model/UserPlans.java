@@ -16,12 +16,10 @@ public class UserPlans {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_plan_id;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
-
     @ManyToOne
     @JoinColumn(name = "plan_id")
     @JsonIgnore
