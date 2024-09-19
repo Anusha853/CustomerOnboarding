@@ -5,10 +5,7 @@ import com.bootcamp.customer.Onboarding.model.AdminDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,4 +29,14 @@ public class AdminController {
         List<AdminDto> users = userService.getUsersByDocumentStatus(isVerified);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+    @PostMapping("/users/plan/activation")
+    public ResponseEntity<String> togglePlanActivation(@RequestParam Long userId, @RequestParam Long planId) {
+        boolean updated = userService.togglePlanActivation(userId, planId);
+        if (updated) {
+            return new ResponseEntity<>("Plan activation status updated successfully.", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Failed to update plan activation status.", HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

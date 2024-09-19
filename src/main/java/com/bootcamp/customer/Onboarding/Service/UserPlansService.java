@@ -68,6 +68,7 @@ public class UserPlansService {
         userPlans.setPlan(plan);
         userPlans.setActivation_date(new Date());
         userPlans.setExpiration_date(new Date(System.currentTimeMillis() + (plan.getValidity_days() * 24 * 60 * 60 * 1000L)));
+        userPlans.setActivated(true);
         userPlansRepository.save(userPlans);
 
         // adding data into the Notification repository

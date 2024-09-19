@@ -3,19 +3,33 @@ package com.bootcamp.customer.Onboarding.model;
 import java.util.List;
 
 public class AdminDto {
+    private Long userId;
     private String username;
     private String email;
     private String phoneNo;
     private String customerTypeName;
     private String documentStatus;
+
+    public List<String> getPlanNames() {
+        return planNames;
+    }
+
+    public void setPlanNames(List<String> planNames) {
+        this.planNames = planNames;
+    }
+
+    private List<Long> planIds;
     private List<String> planNames;
-    public AdminDto(String username, String email, String phoneNo, String customerTypeName, String documentStatus, List<String> planNames) {
+
+    public AdminDto(Long userId, String username, String email, String phoneNo, String customerTypeName, String documentStatus, List<Long> planIds, List<String> planNames) {
+        this.userId = userId;
         this.username = username;
         this.email = email;
         this.phoneNo = phoneNo;
         this.customerTypeName = customerTypeName;
         this.documentStatus = documentStatus;
-        this.planNames = planNames;
+        this.planIds = planIds;  // Initialize planIds
+        this.planNames = planNames; // Initialize planNames
     }
 
     public String getUsername() {
@@ -58,11 +72,19 @@ public class AdminDto {
         this.documentStatus = documentStatus;
     }
 
-    public List<String> getPlanNames() {
-        return planNames;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setPlanNames(List<String> planNames) {
-        this.planNames = planNames;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public List<Long> getPlanIds() {
+        return planIds;
+    }
+
+    public void setPlanIds(List<Long> planIds) {
+        this.planIds = planIds;
     }
 }

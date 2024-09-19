@@ -10,34 +10,38 @@ import lombok.Setter;
 
 import java.util.Date;
 
-@Entity
+    @Entity
 
-public class UserPlans {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_plan_id;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonBackReference
-    private User user;
-    @ManyToOne
-    @JoinColumn(name = "plan_id")
-    @JsonIgnore
-    private Plans plan;
+    public class UserPlans {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long user_plan_id;
+        @ManyToOne
+        @JoinColumn(name = "user_id")
+        @JsonBackReference
+        private User user;
+        @ManyToOne
+        @JoinColumn(name = "plan_id")
+        @JsonIgnore
+        private Plans plan;
 
-    private Date activation_date;
-    private Date expiration_date;
+        private Date activation_date;
+        private Date expiration_date;
 
-    public UserPlans(Long user_plan_id, User user, Plans plan, Date activation_date, Date expiration_date) {
-        this.user_plan_id = user_plan_id;
-        this.user = user;
-        this.plan = plan;
-        this.activation_date = activation_date;
-        this.expiration_date = expiration_date;
-    }
+        @Column(name = "activated", nullable = false)
+        private boolean activated = false;
 
-    public UserPlans() {
-    }
+
+        public UserPlans(Long user_plan_id, User user, Plans plan, Date activation_date, Date expiration_date) {
+            this.user_plan_id = user_plan_id;
+            this.user = user;
+            this.plan = plan;
+            this.activation_date = activation_date;
+            this.expiration_date = expiration_date;
+        }
+
+        public UserPlans() {
+        }
 
     public Long getUser_plan_id() {
         return user_plan_id;
@@ -78,4 +82,13 @@ public class UserPlans {
     public void setExpiration_date(Date expiration_date) {
         this.expiration_date = expiration_date;
     }
+
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public void setActivated(boolean activated) {
+        this.activated = activated;
+    }
+
 }

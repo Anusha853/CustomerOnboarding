@@ -24,4 +24,6 @@ public interface UserPlansRepository extends JpaRepository<UserPlans,Long> {
     @Query("SELECT up.plan.planId FROM UserPlans up WHERE up.user.userId = :userId")
     List<Long> findPlanIdsByUserId(@Param("userId") Long userId);
 
+    Optional<UserPlans> findByUser_UserIdAndPlan_PlanId(Long userId, Long planId);
+
 }

@@ -139,7 +139,6 @@ public class UserService {
     }
 // Admin methods
 public List<AdminDto> getAllUsers() {
-    System.out.println(userRepository.findAll().stream().map(this::convertToAdminDto).collect(Collectors.toList()));
     return userRepository.findAll().stream().map(this::convertToAdminDto).collect(Collectors.toList());
 }
 
@@ -160,24 +159,39 @@ public List<AdminDto> getAllUsers() {
     }
 
     private AdminDto convertToAdminDto(User user) {
-        // Get document status
         Optional<Document> document = documentRepository.findById(user.getUserId());
         String documentStatus = document.isPresent() && document.get().isStatus() ? "Verified" : "Not Verified";
 
-        List<String> planNames = user.getUserPlans().stream()
-                .map(up -> up.getPlan().getPlan_name())
-                .collect(Collectors.toList());
+        List<Long> planIds = new ArrayList<>();
+        List<String> planNames = new ArrayList<>();
+
+        user.getUserPlans().forEach(up -> {
+            planIds.add(up.getPlan().getPlan_id());
+            planNames.add(up.getPlan().getPlan_name());
+        });
 
         String customerTypeName = user.getCustomerTypeEntity() != null ? user.getCustomerTypeEntity().getDescription() : "Unknown";
 
         return new AdminDto(
+                user.getUserId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getPhoneNumber(),
                 customerTypeName,
                 documentStatus,
+                planIds,
                 planNames
         );
+    }
+    public boolean togglePlanActivation(Long userId, Long planId) {
+        Optional<UserPlans> userPlanOptional = userPlansRepository.findByUser_UserIdAndPlan_PlanId(userId, planId);
+        if (userPlanOptional.isPresent()) {
+            UserPlans userPlan = userPlanOptional.get();
+            userPlan.setActivated(!userPlan.isActivated());
+            userPlansRepository.save(userPlan);
+            return true;
+        }
+        return false;
     }
 
 }
