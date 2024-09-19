@@ -17,13 +17,10 @@ public class NotificationId implements Serializable {
     private Long userId;
     private Long planId;
 
+    public NotificationId(){}
     public NotificationId(Long userId, Long planId) {
-        this.planId=planId;
-        this.userId=userId;
     }
 
-    public NotificationId() {
-    }
 
     @Override
     public int hashCode() {

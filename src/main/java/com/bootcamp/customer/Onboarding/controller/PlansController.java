@@ -19,8 +19,8 @@ import java.util.List;
     @Autowired
     private PlansService plansService;
 
-    @GetMapping
-    public List<Plans> getAllPlans() {
+    @GetMapping("/all")
+    public List<Plans> getAllPlans(){
         return plansService.getAllPlans();
     }
 
