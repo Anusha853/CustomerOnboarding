@@ -1,33 +1,68 @@
 package com.bootcamp.customer.Onboarding.model;
 
+import java.util.List;
+
 public class AdminDto {
     private String username;
     private String email;
-    private int customerType;
+    private String phoneNo;
+    private String customerTypeName;
     private String documentStatus;
-    private String planName;
-
-    public AdminDto(String username, String email, int customerType, String documentStatus, String planName) {
+    private List<String> planNames;
+    public AdminDto(String username, String email, String phoneNo, String customerTypeName, String documentStatus, List<String> planNames) {
         this.username = username;
         this.email = email;
-        this.customerType = customerType;
+        this.phoneNo = phoneNo;
+        this.customerTypeName = customerTypeName;
         this.documentStatus = documentStatus;
-        this.planName = planName;
+        this.planNames = planNames;
     }
 
+    public String getUsername() {
+        return username;
+    }
 
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getEmail() {
+        return email;
+    }
 
-    public int getCustomerType() { return customerType; }
-    public void setCustomerType(int customerType) { this.customerType = customerType; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public String getDocumentStatus() { return documentStatus; }
-    public void setDocumentStatus(String documentStatus) { this.documentStatus = documentStatus; }
+    public String getPhoneNo() {
+        return phoneNo;
+    }
 
-    public String getPlanName() { return planName; }
-    public void setPlanName(String planName) { this.planName = planName; }
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
+    public String getCustomerTypeName() {
+        return customerTypeName;
+    }
+
+    public void setCustomerTypeName(String customerTypeName) {
+        this.customerTypeName = customerTypeName;
+    }
+
+    public String getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public void setDocumentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+    }
+
+    public List<String> getPlanNames() {
+        return planNames;
+    }
+
+    public void setPlanNames(List<String> planNames) {
+        this.planNames = planNames;
+    }
 }

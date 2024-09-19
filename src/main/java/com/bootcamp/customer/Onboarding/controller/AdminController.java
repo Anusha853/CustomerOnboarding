@@ -15,16 +15,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
-
     @Autowired
     private UserService userService;
-
     @GetMapping("/users")
     public ResponseEntity<List<AdminDto>> getAllUsers() {
         List<AdminDto> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
-
     @GetMapping("/users/filter")
     public ResponseEntity<List<AdminDto>> getUsersByType(@RequestParam int customerType) {
         List<AdminDto> users = userService.getUsersByType(customerType);

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -108,37 +109,33 @@ public class UserService {
     }
 
     public UserDetailsDTO authenticate(String username, String password) {
+
         User user = userRepository.findByUsername(username);
-
-        Long planid=userPlansRepository.findPlanIdByUserId(user.getUserId());
-
-        Plans plans = plansRepository.findByPlanId(planid);
-        boolean doc_verified=documentRepository.isDocumentVerified(user.getUserId());
-        if (user != null && passwordEncoder.matches(password, user.getPasswordHash())) {
-            if(plans!=null){
-                return new UserDetailsDTO(
-                        user.getUsername(),
-                        user.getUsername(),
-                        user.getPhoneNumber(),
-                        user.getCustomerType(),
-                        plans.getPlan_name(),
-                        plans.getPlan_description(),
-                        plans.getPrice(),
-                        plans.getValidity_days(),
-                        doc_verified
-                );}
-            else{
-                return new UserDetailsDTO(
-                        user.getUsername(),
-                        user.getUsername(),
-                        user.getPhoneNumber(),
-                        user.getCustomerType(),
-                        doc_verified
-                );
-
+        if (user == null || !passwordEncoder.matches(password, user.getPasswordHash())) {
+            return null;
+        }
+        // Fetch all plans associated with the user
+        List< Plans > plans = userPlansRepository.findPlansByUserId(user.getUserId());
+        List < PlanDTO > plansList = new ArrayList< >();
+        for (Plans plan: plans) {
+            if (plan != null) {
+                plansList.add(new PlanDTO(
+                        plan.getPlan_name(),
+                        plan.getPlan_description(),
+                        plan.getPrice(),
+                        plan.getValidity_days()
+                ));
             }
         }
-        return null;
+        boolean doc_verified = documentRepository.isDocumentVerified(user.getUserId());
+        return new UserDetailsDTO(
+                user.getUsername(),
+                user.getPhoneNumber(),
+                user.getCustomerType(),
+                plansList,
+                doc_verified,
+                user.getEmail()
+        );
     }
 // Admin methods
 public List<AdminDto> getAllUsers() {
@@ -167,18 +164,20 @@ public List<AdminDto> getAllUsers() {
         Optional<Document> document = documentRepository.findById(user.getUserId());
         String documentStatus = document.isPresent() && document.get().isStatus() ? "Verified" : "Not Verified";
 
-        // Get plan name
-        Optional<UserPlans> userPlan = userPlansRepository.findByUser(user);
-        String planName = userPlan.isPresent() ? userPlan.get().getPlan().getPlan_name() : "NA";
+        List<String> planNames = user.getUserPlans().stream()
+                .map(up -> up.getPlan().getPlan_name())
+                .collect(Collectors.toList());
+
+        String customerTypeName = user.getCustomerTypeEntity() != null ? user.getCustomerTypeEntity().getDescription() : "Unknown";
 
         return new AdminDto(
                 user.getUsername(),
                 user.getEmail(),
-                user.getCustomerType(),
+                user.getPhoneNumber(),
+                customerTypeName,
                 documentStatus,
-                planName
+                planNames
         );
     }
-
 
 }

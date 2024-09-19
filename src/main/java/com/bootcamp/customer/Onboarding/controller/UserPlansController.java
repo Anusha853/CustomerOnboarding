@@ -34,9 +34,17 @@ public class UserPlansController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Void> addPlanToUser(@RequestParam Long userId, @RequestParam Long planId){
-        userPlansService.addPlanToUser(userId,planId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> addPlanToUser(@RequestParam Long userId, @RequestParam Long planId) {
+        try {
+            boolean addedPlans = userPlansService.addPlanToUser(userId, planId);
+            if (addedPlans) {
+                return ResponseEntity.ok("Plan added successfully.");
+            } else {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Plan already associated with the user.");
+            }
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
 }

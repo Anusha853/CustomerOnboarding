@@ -48,7 +48,7 @@ public class UserPlansService {
             userPlansRepository.save(userPlans);
         }
     }
-    public void addPlanToUser(Long userId, Long planId) {
+    public boolean addPlanToUser(Long userId, Long planId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new RuntimeException("User Not Found")
         );
@@ -56,6 +56,12 @@ public class UserPlansService {
         Plans plan = plansRepository.findById(planId).orElseThrow(
                 () -> new RuntimeException("Plan not found")
         );
+
+        List<Long> planList = userPlansRepository.findPlanIdsByUserId(userId);
+
+        for(Long userPlan : planList){
+            if(userPlan == planId) return false;
+        }
 
         UserPlans userPlans = new UserPlans();
         userPlans.setUser(user);
@@ -66,7 +72,7 @@ public class UserPlansService {
 
         // adding data into the Notification repository
         notificationService.createNotification(userId,planId);
-
+        return true;
     }
     public Optional<UserPlans> getUserPlans(Long userId){
         User user = userRepository.findById(userId).orElseThrow(
