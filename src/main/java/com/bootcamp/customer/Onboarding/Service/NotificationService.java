@@ -62,7 +62,6 @@ public class NotificationService {
             throw new ResourceNotFoundException("User not found for userId :"  + userId);
         }
 
-
         List<Long> userPlansList = userPlansRepository.findPlanIdsByUserId(userId);
         System.out.println(userPlansList);
 
@@ -73,6 +72,7 @@ public class NotificationService {
                 throw new ResourceNotFoundException("Plan not found for userId :"  + userId);
             }
             NotificationId notificationId = new NotificationId(userId,userPlanId);
+            System.out.println(notificationId);
             Notification notification = notificationRepository.findById(notificationId).orElseThrow(
                     ()-> new ResourceNotFoundException("Error while sending the notification for user: " + userId+ " planId: " + userPlanId)
             );

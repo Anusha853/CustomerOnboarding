@@ -20,8 +20,9 @@ public class AdminDto {
 
     private List<Long> planIds;
     private List<String> planNames;
+    private List<Boolean> planActivationStatuses; // Add this field to store activation status
 
-    public AdminDto(Long userId, String username, String email, String phoneNo, String customerTypeName, String documentStatus, List<Long> planIds, List<String> planNames) {
+    public AdminDto(Long userId, String username, String email, String phoneNo, String customerTypeName, String documentStatus, List<Long> planIds, List<String> planNames, List<Boolean> planActivationStatuses) {
         this.userId = userId;
         this.username = username;
         this.email = email;
@@ -30,6 +31,14 @@ public class AdminDto {
         this.documentStatus = documentStatus;
         this.planIds = planIds;  // Initialize planIds
         this.planNames = planNames; // Initialize planNames
+        this.planActivationStatuses = planActivationStatuses;
+    }
+    public List<Boolean> getPlanActivationStatuses() {
+        return planActivationStatuses;
+    }
+
+    public void setPlanActivationStatuses(List<Boolean> planActivationStatuses) {
+        this.planActivationStatuses = planActivationStatuses;
     }
 
     public String getUsername() {

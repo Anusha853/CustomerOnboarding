@@ -119,16 +119,20 @@ public class UserService {
         List < PlanDTO > plansList = new ArrayList< >();
         for (Plans plan: plans) {
             if (plan != null) {
+                boolean status=userPlansRepository.findActivationStatusByUserIdAndPlanId(user.getUserId(),plan.getPlan_id());
                 plansList.add(new PlanDTO(
                         plan.getPlan_name(),
                         plan.getPlan_description(),
                         plan.getPrice(),
-                        plan.getValidity_days()
+                        plan.getValidity_days(),
+                        status
+
                 ));
             }
         }
         boolean doc_verified = documentRepository.isDocumentVerified(user.getUserId());
         return new UserDetailsDTO(
+                user.getUserId(),
                 user.getUsername(),
                 user.getPhoneNumber(),
                 user.getCustomerType(),
@@ -158,16 +162,44 @@ public List<AdminDto> getAllUsers() {
                 .collect(Collectors.toList());
     }
 
+//    private AdminDto convertToAdminDto(User user) {
+//        Optional<Document> document = documentRepository.findById(user.getUserId());
+//        String documentStatus = document.isPresent() && document.get().isStatus() ? "Verified" : "Not Verified";
+//
+//        List<Long> planIds = new ArrayList<>();
+//        List<String> planNames = new ArrayList<>();
+//
+//        user.getUserPlans().forEach(up -> {
+//            planIds.add(up.getPlan().getPlan_id());
+//            planNames.add(up.getPlan().getPlan_name());
+//        });
+//
+//        String customerTypeName = user.getCustomerTypeEntity() != null ? user.getCustomerTypeEntity().getDescription() : "Unknown";
+//
+//        return new AdminDto(
+//                user.getUserId(),
+//                user.getUsername(),
+//                user.getEmail(),
+//                user.getPhoneNumber(),
+//                customerTypeName,
+//                documentStatus,
+//                planIds,
+//                planNames
+//        );
+//    }
+
     private AdminDto convertToAdminDto(User user) {
         Optional<Document> document = documentRepository.findById(user.getUserId());
         String documentStatus = document.isPresent() && document.get().isStatus() ? "Verified" : "Not Verified";
 
         List<Long> planIds = new ArrayList<>();
         List<String> planNames = new ArrayList<>();
+        List<Boolean> planActivationStatuses = new ArrayList<>(); // New list to store activation statuses
 
         user.getUserPlans().forEach(up -> {
             planIds.add(up.getPlan().getPlan_id());
             planNames.add(up.getPlan().getPlan_name());
+            planActivationStatuses.add(up.isActivated()); // Add activation status
         });
 
         String customerTypeName = user.getCustomerTypeEntity() != null ? user.getCustomerTypeEntity().getDescription() : "Unknown";
@@ -180,9 +212,11 @@ public List<AdminDto> getAllUsers() {
                 customerTypeName,
                 documentStatus,
                 planIds,
-                planNames
+                planNames,
+                planActivationStatuses // Pass the activation statuses
         );
     }
+
     public boolean togglePlanActivation(Long userId, Long planId) {
         Optional<UserPlans> userPlanOptional = userPlansRepository.findByUser_UserIdAndPlan_PlanId(userId, planId);
         if (userPlanOptional.isPresent()) {

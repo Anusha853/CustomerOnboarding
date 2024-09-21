@@ -48,6 +48,7 @@ public class UserPlansService {
             userPlansRepository.save(userPlans);
         }
     }
+
     public boolean addPlanToUser(Long userId, Long planId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new RuntimeException("User Not Found")
@@ -73,6 +74,7 @@ public class UserPlansService {
 
         // adding data into the Notification repository
         notificationService.createNotification(userId,planId);
+        notificationService.notificationSentForUser(userId);
         return true;
     }
     public Optional<UserPlans> getUserPlans(Long userId){

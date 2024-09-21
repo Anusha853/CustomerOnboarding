@@ -24,6 +24,11 @@ public interface UserPlansRepository extends JpaRepository<UserPlans,Long> {
     @Query("SELECT up.plan.planId FROM UserPlans up WHERE up.user.userId = :userId")
     List<Long> findPlanIdsByUserId(@Param("userId") Long userId);
 
+    @Query("SELECT up.activated FROM UserPlans up WHERE up.user.userId = :userId AND up.plan.planId = :planId")
+    Boolean findActivationStatusByUserIdAndPlanId(@Param("userId") Long userId, @Param("planId") Long planId);
+
+
+
     Optional<UserPlans> findByUser_UserIdAndPlan_PlanId(Long userId, Long planId);
 
 }

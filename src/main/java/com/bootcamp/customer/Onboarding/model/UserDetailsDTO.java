@@ -4,6 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDetailsDTO {
+    private Long userId;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     private String username;
     private String name;
     private String phone;
@@ -53,7 +63,8 @@ public class UserDetailsDTO {
     public void setPlans(List<PlanDTO> plans) {
         this.plans = plans;
     }
-    public UserDetailsDTO(String username, String phone, int customerType, List<PlanDTO> plans, boolean documentVerification,String email) {
+    public UserDetailsDTO(Long userId,String username, String phone, int customerType, List<PlanDTO> plans, boolean documentVerification,String email) {
+        this.userId=userId;
         this.username = username;
         this.phone = phone;
         this.customerType = customerType;

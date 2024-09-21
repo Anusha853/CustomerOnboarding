@@ -27,12 +27,7 @@ public class DocumentController {
         }
     }
 
-//    @PutMapping("/verify")
-//    public ResponseEntity<Document> verifyDocument(@RequestParam Long userId){
-//        Document verifiedDocument = documentService.verifyDocument(userId);
-//
-//        return ResponseEntity.ok(verifiedDocument);
-//    }
+
 
     @GetMapping("/status")
 

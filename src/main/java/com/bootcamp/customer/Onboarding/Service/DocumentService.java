@@ -48,6 +48,7 @@ public class DocumentService {
         String text = tesseract.doOCR(tempFilePath.toFile());
 
         String aadhaarNumber = extractAadhaarNumber(text);
+        System.out.println(aadhaarNumber);
         String name = extractName(text);
 
         Files.delete(tempFilePath);
@@ -119,7 +120,6 @@ public class DocumentService {
             Document document = documentOpt.get();
             document.setStatus(true);
             notificationService.documentVerificationSuccess(userId);
-            notificationService.notificationSentForUser(userId);
             return documentRepository.save(document);
         } else {
             throw new ResourceNotFoundException("Document not found for userId:" + userId);

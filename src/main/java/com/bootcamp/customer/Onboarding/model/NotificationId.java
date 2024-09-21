@@ -19,6 +19,8 @@ public class NotificationId implements Serializable {
 
     public NotificationId(){}
     public NotificationId(Long userId, Long planId) {
+        this.userId = userId;
+        this.planId = planId;
     }
 
 
@@ -35,6 +37,11 @@ public class NotificationId implements Serializable {
         return Objects.equals(userId, that.userId) && Objects.equals(planId, that.planId);
     }
 
-
-
+    @Override
+    public String toString() {
+        return "NotificationId{" +
+                "userId=" + userId +
+                ", planId=" + planId +
+                '}';
+    }
 }
