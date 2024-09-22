@@ -1,56 +1,56 @@
 pipeline {
-    agent any // Use any available Jenkins agent
+    agent any
 
     environment {
-        // Define environment variables
-        JAVA_HOME = tool name: 'Java 17', type: 'jdk' // Ensure this matches the OpenJDK configuration name in Jenkins
-        MAVEN_HOME = tool name: 'Maven 3.9.8', type: 'maven' // Ensure this matches the Maven configuration name in Jenkins
-    }
-
-    tools {
-        // Specify the Maven and OpenJDK versions to use
-        maven 'Maven 3.9.8' // Ensure this matches the Maven installation name in Jenkins
-        jdk 'Java 21' // Ensure this matches the OpenJDK installation name in Jenkins
+        MAVEN_HOME = tool 'Maven3' // Replace with the actual name of your Maven installation
+        JAVA_HOME = tool 'JDK 17' // Replace with the actual name of your JDK installation
     }
 
     stages {
+        stage('Checkout Code') {
+            steps {
+                git 'https://github.com/AdityaPawar1005/Customer_Onboarding.git'
+            }
+        }
+
         stage('Build') {
             steps {
-                // Build the project using Maven
-                echo 'Build successful'
-                //bat 'mvn clean install'
+                echo 'Building the project...'
+                sh "${MAVEN_HOME}/bin/mvn clean install"
             }
         }
-        
+
         stage('Test') {
             steps {
-                // Run tests using Maven
-                echo 'Test successful'
-                //bat 'mvn test'
+                echo 'Running tests...'
+                sh "${MAVEN_HOME}/bin/mvn test"
             }
         }
-        
+
         stage('Package') {
             steps {
-                // Package the project using Maven
-                echo 'Success'
-                //bat 'mvn package'
+                echo 'Packaging the application...'
+                sh "${MAVEN_HOME}/bin/mvn package"
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying the project...'
+                // Customize deployment steps here
             }
         }
     }
-    
+
     post {
+        always {
+            echo 'Pipeline finished.'
+        }
         success {
-            // Actions to perform on successful build
-            echo 'Build and tests succeeded!'
+            echo 'Pipeline succeeded.'
         }
         failure {
-            // Actions to perform on failed build
-            echo 'Build or tests failed.'
-        }
-        always {
-            // Actions to perform regardless of success or failure
-            echo 'Pipeline finished.'
+            echo 'Pipeline failed.'
         }
     }
 }
