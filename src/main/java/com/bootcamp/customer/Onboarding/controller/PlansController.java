@@ -39,12 +39,4 @@ import java.util.List;
     }
 }
 
-/*
-    @GetMapping("/{id}")
-        public Plans getPlanById(@PathVariable Long id){
-            return plansService.getPlanById(id);
-        }
-    }
-*/
-
 

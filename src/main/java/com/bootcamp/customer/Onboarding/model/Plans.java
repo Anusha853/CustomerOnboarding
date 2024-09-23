@@ -73,11 +73,5 @@ public class Plans {
         this.validity_days = validity_days;
     }
 
-    public PlanType getPlan_type() {
-        return plan_type;
-    }
 
-    public void setPlan_type(PlanType plan_type) {
-        this.plan_type = plan_type;
-    }
 }
