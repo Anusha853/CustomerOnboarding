@@ -4,13 +4,12 @@ services:
   mysql:
     image: mysql:8.0
     container_name: mysql_db
+
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: telecom_db
-      MYSQL_USER: root
-      MYSQL_PASSWORD: password
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql-data:/var/lib/mysql
 
@@ -18,13 +17,13 @@ services:
     build: .
     container_name: springboot_app
     ports:
-      - "7777:8080"
+      - "7777:8081"
     depends_on:
       - mysql
     environment:
-      DB_USERNAME: root
-      DB_PASSWORD: root
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/telecom_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
       SPRING_PROFILES_ACTIVE: dev
-
 volumes:
   mysql-data:

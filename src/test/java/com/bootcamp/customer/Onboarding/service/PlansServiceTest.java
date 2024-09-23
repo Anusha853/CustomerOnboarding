@@ -1,80 +1,103 @@
 package com.bootcamp.customer.Onboarding.service;
 
 
+import com.bootcamp.customer.Onboarding.Repository.PlanTypeRepository;
 import com.bootcamp.customer.Onboarding.Repository.PlansRepository;
+import com.bootcamp.customer.Onboarding.Repository.UserRepository;
 import com.bootcamp.customer.Onboarding.Service.PlansService;
+import com.bootcamp.customer.Onboarding.model.PlanType;
 import com.bootcamp.customer.Onboarding.model.Plans;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class PlansServiceTest {
 
-    @InjectMocks
-    private PlansService plansService;
-
     @Mock
     private PlansRepository plansRepository;
 
-    private Plans plan1;
-    private Plans plan2;
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private PlanTypeRepository planTypeRepository;
+
+    @InjectMocks
+    private PlansService plansService;
+
+    private Plans plan;
+    private PlanType planType;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        // Initialize mock data
-        plan1 = new Plans(1L, "Plan A", "Description A", 199.99, 30, null);
-        plan2 = new Plans(2L, "Plan B", "Description B", 299.99, 60, null);
+        plan = new Plans();
+        plan.setPlan_id(1L);
+        plan.setPlan_name("Basic Plan");
+
+        planType = new PlanType();
+        planType.setPlan_type_id(1L);
+        planType.setPlan_type_name("Type A");
+    }
+
+    @Test
+    public void testGetAllPlanTypes() {
+        List<PlanType> planTypes = new ArrayList<>(Arrays.asList(planType));
+        when(planTypeRepository.findAll()).thenReturn(planTypes);
+
+        List<PlanType> result = plansService.getAllPlanTypes();
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("Type A", result.get(0).getPlan_type_name());
+        verify(planTypeRepository).findAll();
     }
 
     @Test
     public void testGetAllPlans() {
-        // Given
-        List<Plans> allPlans = Arrays.asList(plan1, plan2);
-        when(plansRepository.findAll()).thenReturn(allPlans);
+        List<Plans> plansList = new ArrayList<>(Arrays.asList(plan));
+        when(plansRepository.findAll()).thenReturn(plansList);
 
-        // When
         List<Plans> result = plansService.getAllPlans();
 
-        // Then
-        assertEquals(2, result.size());
-        assertEquals("Plan A", result.get(0).getPlan_name());
-        assertEquals("Plan B", result.get(1).getPlan_name());
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("Basic Plan", result.get(0).getPlan_name());
+        verify(plansRepository).findAll();
     }
 
     @Test
-    public void testGetPlanByIdFound() {
-        // Given
-        when(plansRepository.findById(1L)).thenReturn(Optional.of(plan1));
+    public void testGetPlanById_Found() {
+        when(plansRepository.findById(1L)).thenReturn(Optional.of(plan));
 
-        // When
         Plans result = plansService.getPlanById(1L);
 
-        // Then
-        assertEquals("Plan A", result.getPlan_name());
-        assertEquals(199.99, result.getPrice());
-        assertEquals(30, result.getValidity_days());
+        assertNotNull(result);
+        assertEquals("Basic Plan", result.getPlan_name());
+        verify(plansRepository).findById(1L);
     }
 
     @Test
-    public void testGetPlanByIdNotFound() {
-        // Given
-        when(plansRepository.findById(anyLong())).thenReturn(Optional.empty());
+    public void testGetPlanById_NotFound() {
+        when(plansRepository.findById(1L)).thenReturn(Optional.empty());
 
-        // When
-        Plans result = plansService.getPlanById(999L);
+        Plans result = plansService.getPlanById(1L);
 
-        // Then
         assertNull(result);
+        verify(plansRepository).findById(1L);
     }
 }

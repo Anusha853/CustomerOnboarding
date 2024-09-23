@@ -8,7 +8,7 @@ WORKDIR /app
 COPY target/Onboarding-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose the port your application runs on
-EXPOSE 7777
+EXPOSE 8081
 
 # Define the command to run your application
 ENTRYPOINT ["java", "-jar", "app.jar"]
