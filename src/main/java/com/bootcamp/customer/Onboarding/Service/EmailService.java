@@ -178,6 +178,7 @@ public class EmailService {
             MailjetResponse response = mailjetClient.post(request);
             if (response.getStatus() == 200) {
                 System.out.println("Email sent successfully for document verification");
+
             } else {
                 String responseBody = response.getData().toString();
                 throw new RuntimeException("Failed to send email. Status code: " + response.getStatus() + ", Response body: " + responseBody);

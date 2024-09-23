@@ -104,17 +104,5 @@ public class User {
         this.userPlans = userPlans;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", username='" + username + '\'' +
-                ", passwordHash='" + passwordHash + '\'' +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", customerType=" + customerType +
-                ", customerTypeEntity=" + customerTypeEntity +
-                ", userPlans=" + userPlans +
-                '}';
-    }
+
 }

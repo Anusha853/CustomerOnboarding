@@ -19,12 +19,6 @@ public class PlanType {
     private String plan_type_description;
     public PlanType(){}
 
-    public PlanType(Long plan_type_id, String plan_type_name, String plan_type_description) {
-        this.plan_type_id = plan_type_id;
-        this.plan_type_name = plan_type_name;
-        this.plan_type_description = plan_type_description;
-    }
-
     public Long getPlan_type_id() {
         return plan_type_id;
     }

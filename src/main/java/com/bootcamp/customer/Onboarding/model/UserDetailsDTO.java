@@ -19,6 +19,11 @@ public class UserDetailsDTO {
     private String phone;
     private int customerType;
     private String email;
+
+    public UserDetailsDTO() {
+
+    }
+
     public String getEmail() {
         return email;
     }

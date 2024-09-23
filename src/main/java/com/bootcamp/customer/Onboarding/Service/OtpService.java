@@ -60,7 +60,7 @@ public class OtpService {
         return false;
     }
 
-    private String generateOtp(){
+    public String generateOtp(){
         StringBuilder otp = new StringBuilder(OTP_LENGTH);
         for(int i=0;i<OTP_LENGTH;i++){
             otp.append(random.nextInt(10));
@@ -69,7 +69,7 @@ public class OtpService {
     }
 
 
-    private static class OtpData {
+    public static class OtpData {
         private final String otp;
         private final long creationTime;
 

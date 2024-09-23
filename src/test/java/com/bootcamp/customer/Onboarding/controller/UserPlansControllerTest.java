@@ -9,12 +9,19 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,14 +46,16 @@ public class UserPlansControllerTest {
         Long userId = 1L;
         List<Long> plansIds = Arrays.asList(1L, 2L, 3L);
 
-        // Mock the service call
         doNothing().when(userPlansService).addPlansToUser(userId, plansIds);
 
-        // Perform the request
-        mockMvc.perform(post("/user/user-plans/addPlans")
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/user-plans/addPlans")
                         .param("userId", userId.toString())
                         .param("plansIds", "1", "2", "3"))
-                .andExpect(status().isOk());
+                .andDo(result -> {
+                    assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+                });
+
+        verify(userPlansService).addPlansToUser(userId, plansIds);
     }
 
     @Test
@@ -54,13 +63,53 @@ public class UserPlansControllerTest {
         Long userId = 1L;
         Long planId = 1L;
 
-        // Mock the service call
-        doNothing().when(userPlansService).addPlanToUser(userId, planId);
+        when(userPlansService.addPlanToUser(userId, planId)).thenReturn(true);
 
-        // Perform the request
-        mockMvc.perform(post("/user/user-plans/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/user-plans/add")
                         .param("userId", userId.toString())
                         .param("planId", planId.toString()))
-                .andExpect(status().isOk());
+                .andDo(result -> {
+                    assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+                    assertEquals("Plan added successfully.", result.getResponse().getContentAsString());
+                });
+
+        verify(userPlansService).addPlanToUser(userId, planId);
     }
+
+    @Test
+    public void testAddPlanToUser_AlreadyExists() throws Exception {
+        Long userId = 1L;
+        Long planId = 1L;
+
+        when(userPlansService.addPlanToUser(userId, planId)).thenReturn(false);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/user-plans/add")
+                        .param("userId", userId.toString())
+                        .param("planId", planId.toString()))
+                .andDo(result -> {
+                    assertEquals(HttpStatus.CONFLICT.value(), result.getResponse().getStatus());
+                    assertEquals("Plan already associated with the user.", result.getResponse().getContentAsString());
+                });
+
+        verify(userPlansService).addPlanToUser(userId, planId);
+    }
+
+    @Test
+    public void testAddPlanToUser_UserNotFound() throws Exception {
+        Long userId = 1L;
+        Long planId = 1L;
+
+        when(userPlansService.addPlanToUser(userId, planId)).thenThrow(new RuntimeException("User Not Found"));
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/user-plans/add")
+                        .param("userId", userId.toString())
+                        .param("planId", planId.toString()))
+                .andDo(result -> {
+                    assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
+                    assertEquals("User Not Found", result.getResponse().getContentAsString());
+                });
+
+        verify(userPlansService).addPlanToUser(userId, planId);
+    }
+
 }

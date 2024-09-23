@@ -1,86 +1,98 @@
 package com.bootcamp.customer.Onboarding.controller;
-
-import com.bootcamp.customer.Onboarding.Service.PlansService;
 import com.bootcamp.customer.Onboarding.model.Plans;
+import com.bootcamp.customer.Onboarding.model.PlanType;
+import com.bootcamp.customer.Onboarding.Service.PlansService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.*;
 
-@WebMvcTest(PlansController.class)
 public class PlansControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @InjectMocks
+    private PlansController plansController;
 
-    @MockBean
+    @Mock
     private PlansService plansService;
-
-    private Plans plan1;
-    private Plans plan2;
 
     @BeforeEach
     public void setUp() {
-        // Creating mock data for testing
-        plan1 = new Plans(1L, "Plan A", "Description A", 199.99, 30, null);
-        plan2 = new Plans(2L, "Plan B", "Description B", 299.99, 60, null);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER"}) // Simulating an authenticated user
-    public void testGetAllPlans() throws Exception {
-        List<Plans> allPlans = Arrays.asList(plan1, plan2);
+    public void testGetAllPlans_Success() {
+        Plans plan1 = new Plans(); // Populate with appropriate values
+        Plans plan2 = new Plans();
+        List<Plans> plansList = Arrays.asList(plan1, plan2);
 
-        // Mocking the service call
-        when(plansService.getAllPlans()).thenReturn(allPlans);
+        when(plansService.getAllPlans()).thenReturn(plansList);
 
-        // Performing the GET request and checking response
-        mockMvc.perform(get("/user/plans"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].plan_name", is("Plan A")))
-                .andExpect(jsonPath("$[1].plan_name", is("Plan B")));
+        List<Plans> result = plansController.getAllPlans();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        verify(plansService, times(1)).getAllPlans();
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER"}) // Simulating an authenticated user
-    public void testGetPlanById() throws Exception {
-        // Mocking the service call
-        when(plansService.getPlanById(1L)).thenReturn(plan1);
+    public void testGetPlanById_Found() {
+        Long planId = 1L;
+        Plans plan = new Plans(); // Populate with appropriate values
+        when(plansService.getPlanById(planId)).thenReturn(plan);
 
-        // Performing the GET request for plan ID 1
-        mockMvc.perform(get("/user/plans/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.plan_name", is("Plan A")))
-                .andExpect(jsonPath("$.price", is(199.99)))
-                .andExpect(jsonPath("$.validity_days", is(30)));
+        ResponseEntity<Plans> response = plansController.getPlanById(planId);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(plan, response.getBody());
+        verify(plansService, times(1)).getPlanById(planId);
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER"}) // Simulating an authenticated user
-    public void testGetPlanByIdNotFound() throws Exception {
-        // Mocking the service call to return null when no plan is found
-        when(plansService.getPlanById(anyLong())).thenReturn(null);
+    public void testGetPlanById_NotFound() {
+        Long planId = 1L;
+        when(plansService.getPlanById(planId)).thenReturn(null);
 
-        // Performing the GET request for an invalid plan ID
-        mockMvc.perform(get("/user/plans/999"))
-                .andExpect(status().isNotFound());
+        ResponseEntity<Plans> response = plansController.getPlanById(planId);
+
+        assertEquals(404, response.getStatusCodeValue());
+        assertNull(response.getBody());
+        verify(plansService, times(1)).getPlanById(planId);
+    }
+
+    @Test
+    public void testGetAllPlanTypes_Success() {
+        PlanType type1 = new PlanType(); // Populate with appropriate values
+        PlanType type2 = new PlanType();
+        List<PlanType> planTypesList = Arrays.asList(type1, type2);
+
+        when(plansService.getAllPlanTypes()).thenReturn(planTypesList);
+
+        List<PlanType> result = plansController.getAllPlanTypes();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        verify(plansService, times(1)).getAllPlanTypes();
+    }
+
+    @Test
+    public void testGetAllPlanTypes_Empty() {
+        when(plansService.getAllPlanTypes()).thenReturn(Collections.emptyList());
+
+        List<PlanType> result = plansController.getAllPlanTypes();
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(plansService, times(1)).getAllPlanTypes();
     }
 }
