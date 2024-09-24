@@ -27,5 +27,36 @@ package com.bootcamp.customer.Onboarding.model;
             this.activation=activation;
         }
 
+        public String getPlanName() {
+            return planName;
+        }
+
+        public void setPlanName(String planName) {
+            this.planName = planName;
+        }
+
+        public String getPlanDescription() {
+            return planDescription;
+        }
+
+        public void setPlanDescription(String planDescription) {
+            this.planDescription = planDescription;
+        }
+
+        public double getPrice() {
+            return price;
+        }
+
+        public void setPrice(double price) {
+            this.price = price;
+        }
+
+        public int getValidityDays() {
+            return validityDays;
+        }
+
+        public void setValidityDays(int validityDays) {
+            this.validityDays = validityDays;
+        }
     }
 

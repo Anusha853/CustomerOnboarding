@@ -68,7 +68,7 @@ public class UserDetailsDTO {
     public void setPlans(List<PlanDTO> plans) {
         this.plans = plans;
     }
-    public UserDetailsDTO(){}
+    //public UserDetailsDTO(){}
     public UserDetailsDTO(Long userId,String username, String phone, int customerType, List<PlanDTO> plans, boolean documentVerification,String email) {
         this.userId=userId;
         this.username = username;

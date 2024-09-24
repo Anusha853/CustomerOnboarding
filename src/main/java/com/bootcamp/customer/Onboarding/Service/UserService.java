@@ -119,7 +119,7 @@ public class UserService {
         List < PlanDTO > plansList = new ArrayList< >();
         for (Plans plan: plans) {
             if (plan != null) {
-                boolean status=userPlansRepository.findActivationStatusByUserIdAndPlanId(user.getUserId(),plan.getPlan_id());
+                boolean status=userPlansRepository.findActivationStatusByUserIdAndPlanId(user.getUserId(),plan.getPlanId());
                 plansList.add(new PlanDTO(
                         plan.getPlan_name(),
                         plan.getPlan_description(),
@@ -197,7 +197,7 @@ public List<AdminDto> getAllUsers() {
         List<Boolean> planActivationStatuses = new ArrayList<>(); // New list to store activation statuses
 
         user.getUserPlans().forEach(up -> {
-            planIds.add(up.getPlan().getPlan_id());
+            planIds.add(up.getPlan().getPlanId());
             planNames.add(up.getPlan().getPlan_name());
             planActivationStatuses.add(up.isActivated()); // Add activation status
         });

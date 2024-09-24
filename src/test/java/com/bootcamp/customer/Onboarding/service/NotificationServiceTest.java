@@ -56,7 +56,7 @@ class NotificationServiceTest {
         user.setEmail("test@example.com");
 
         plan = new Plans();
-        plan.setPlan_id(1L);
+        plan.setPlanId(1L);
         plan.setPlan_name("Basic Plan");
         plan.setValidity_days(30);
     }

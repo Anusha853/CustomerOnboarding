@@ -47,7 +47,7 @@ public class PlansServiceTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         plan = new Plans();
-        plan.setPlan_id(1L);
+        plan.setPlanId(1L);
         plan.setPlan_name("Basic Plan");
 
         planType = new PlanType();
