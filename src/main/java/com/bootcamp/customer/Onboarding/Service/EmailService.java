@@ -82,7 +82,7 @@ public class EmailService {
                 + "<p>We are excited to introduce you to your new plan:</p>"
                 + "<h2 style='color: #2196F3;'>" + planData.getPlan_name() + "</h2>"
                 + "<p><strong>Description:</strong> " + planData.getPlan_description() + "</p>"
-                + "<p><strong>Price:</strong> <span style='color: #FF5722;'>$" + planData.getPrice() + "</span></p>"
+                + "<p><strong>Price:</strong> <span style='color: #FF5722;'>₹" + planData.getPrice() + "</span></p>"
                 + "<p><strong>Validity:</strong> " + planData.getValidity_days() + " days</p>"
                 + "<p><strong>Valid Till:</strong> <span style='color: red;'>" + expirationDate.format(formatter) + "</span></p>"
                 + "<p>Thank you for choosing our service</p>"
